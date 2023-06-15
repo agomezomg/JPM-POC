@@ -46,8 +46,14 @@ public class CatController {
     @PutMapping("/cats/{id}")
     @ResponseBody
     public String updateCat(@PathVariable long id, @RequestBody final Cat cat) {
-        Cat result = catRepo.save(cat);
-        return result.getID() + ": " + result.getName();
+        Cat inDB = catRepo.findById(id).get();
+        boolean changed = inDB.setValues(cat);
+        
+        if (changed) {
+            Cat result = catRepo.save(inDB);
+            return result.getID() + ": " + result.getName();
+        }
+        return "{}";
     }
 
 }

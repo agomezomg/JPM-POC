@@ -18,13 +18,13 @@ public class Cat implements Serializable {
     private long id;
 
     private String name;
-    private int age;
+    private int age = -1;
     private String colour;
     private int hygiene_score;
     private int happiness;
 
     public Cat() {
-        
+
     }
 
     public Cat(String name, int age, String colour, int hygiene_score, int happiness) {
@@ -73,6 +73,31 @@ public class Cat implements Serializable {
 
     public void setHygiene_score(int hygiene_score) {
         this.hygiene_score = hygiene_score;
+    }
+
+    public boolean setValues(Cat cat) {
+        boolean changed = false;
+        if (!cat.name.equals(this.name)) {
+            this.name = cat.name;
+            changed = true;
+        }
+        if (cat.age > 0 && cat.age > this.age && cat.age != this.age) {
+            this.age = cat.age; // can only age up, I guess sadfasdf
+            changed = true;
+        }
+        if (cat.colour != null && !cat.colour.equals(this.colour)) {
+            this.colour = cat.colour;
+            changed = true;
+        }
+        if (cat.hygiene_score >= 0 && cat.hygiene_score != this.hygiene_score) {
+            this.hygiene_score = cat.hygiene_score;
+            changed = true;
+        }
+        if (cat.happiness >= 0 && cat.happiness != this.happiness) {
+            this.happiness = cat.happiness;
+            changed = true;
+        }
+        return changed;
     }
 
     @Override
