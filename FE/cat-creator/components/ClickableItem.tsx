@@ -14,8 +14,8 @@ export default function BoxSx({ specifier }: Specifier) {
     <>
       <Box
         sx={{
-          width: 300,
-          height: 300,
+          width: 600,
+          height: 400,
           backgroundColor: 'white',
           '&:hover': {
             backgroundColor: '#a58ccc',
@@ -40,38 +40,6 @@ export default function BoxSx({ specifier }: Specifier) {
               />
             </Link>
           </div>
-        )}
-        {specifier === "delete" && (
-          <div className='relativePosition'>
-            <Link href={'/cats/delete'}>
-              <Image
-                alt='deleteCat'
-                fill={true}
-                style={{ objectFit: "cover", margin: '100' }}
-                src='deleteCat.svg'
-                onClick={() => {
-                  router.push('/cats/delete');
-                }}
-              />
-            </Link>
-          </div>
-        )}
-        {specifier === "edit" && (
-          <>
-            <div className='relativePosition'>
-              <Link href={'/cats/edit'}>
-                <Image
-                  alt='editCat'
-                  fill={true}
-                  style={{ objectFit: "cover" }}
-                  src='editCat.svg'
-                  onClick={() => {
-                    router.push('/cats/add');
-                  }}
-                />
-              </Link>
-            </div>
-          </>
         )}
         {specifier === "list" && (
           <div className='relativePosition'>

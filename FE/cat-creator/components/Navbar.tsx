@@ -13,7 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-const pages = ['Home', 'Adopt', 'My Cats'];
+const pages = ['Home', 'Create', 'My Cats'];
 
 export default function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -27,9 +27,27 @@ export default function Navbar() {
     setAnchorElNav(null);
   };
 
+  const handleRedirect = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const page = event.currentTarget.value;
+    switch (page) {
+      case 'Home': {
+        router.push('/');
+        break;
+      }
+      case 'Create': {
+        router.push('/cats/add');
+        break;
+      }
+      case 'My Cats': {
+        router.push('/cats/list');
+        break;
+      }
+    }
+  };
+
   const redirectToHome = () => {
     router.push('/');
-  }
+  };
 
   return (
     <AppBar position="static" sx={{ backgroundColor: 'white' }}>
@@ -51,7 +69,7 @@ export default function Navbar() {
                 textDecoration: 'none',
               }}
             >
-              CATDB
+              KITTYNDEX
             </Typography>
           </Link>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' }, backgroundColor: '#white' }}>
@@ -107,13 +125,14 @@ export default function Navbar() {
               textDecoration: 'none',
             }}
           >
-            CATDB
+            KITTYNDEX
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                value={page}
+                onClick={handleRedirect}
                 sx={{ my: 2, color: '#764abc', display: 'block' }}
               >
                 {page}
