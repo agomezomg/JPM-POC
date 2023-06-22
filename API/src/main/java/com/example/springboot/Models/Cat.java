@@ -18,7 +18,7 @@ public class Cat implements Serializable {
     private long id;
 
     private String name;
-    private int age = -1;
+    private int age;
     private String colour;
     private int hygiene_score;
     private int happiness;
@@ -77,11 +77,11 @@ public class Cat implements Serializable {
 
     public boolean setValues(Cat cat) {
         boolean changed = false;
-        if (!cat.name.equals(this.name)) {
+        if (cat.name != null && !cat.name.isEmpty()) {
             this.name = cat.name;
             changed = true;
         }
-        if (cat.age > 0 && cat.age > this.age && cat.age != this.age) {
+        if (cat.age > 0 && cat.age <= 40 && cat.age > this.age) {
             this.age = cat.age; // can only age up, I guess sadfasdf
             changed = true;
         }
@@ -89,11 +89,11 @@ public class Cat implements Serializable {
             this.colour = cat.colour;
             changed = true;
         }
-        if (cat.hygiene_score >= 0 && cat.hygiene_score != this.hygiene_score) {
+        if (cat.hygiene_score >= 0 && cat.hygiene_score <= 100) {
             this.hygiene_score = cat.hygiene_score;
             changed = true;
         }
-        if (cat.happiness >= 0 && cat.happiness != this.happiness) {
+        if (cat.happiness >= 0 && cat.happiness <= 100) {
             this.happiness = cat.happiness;
             changed = true;
         }

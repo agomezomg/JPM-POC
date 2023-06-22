@@ -1,0 +1,7 @@
+.container {
+  padding: 0 2rem;
+  background-color: #764abc;
+  background-image: linear-gradient(#764abc , #a58ccc);
+  height: 100%;
+  display:flex;
+}

@@ -8,10 +8,14 @@ export default function Layout({
 }) {
   return (
     <>
-      <div className={styles.Navbar}>
-        <Navbar />
+      <div className={styles.layoutContainer}>
+        <div className={styles.Navbar}>
+          <Navbar />
+        </div>
+        <div className={styles.componentContainer}>
+          {children} 
+        </div>
       </div>
-      {children} 
     </>
   )
 }
