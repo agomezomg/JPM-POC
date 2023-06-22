@@ -8,25 +8,86 @@ import Typography from '@mui/material/Typography';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { ToggleButton } from '@mui/material';
 import Image from 'next/image';
+import Button from '@mui/material/Button';
+import { useRouter } from 'next/router';
+import { color } from '@mui/system';
 
-const defaultValues = {
-  name: "",
-  age: 0,
-  hygiene_score: 0,
-  happiness: 0,
-  color: "black",
-};
+const textFieldStyle = {
+  width: '100%',
+  "& label": {
+    color: "white"
+  },
+  "& label.Mui-focused": {
+    color: "#483248"
+  },
+  "& .MuiOutlinedInput-input": {
+    color: "white"
+  },
+  "& .MuiOutlinedInput-root": {
+    "input": {
+      color: "white"
+    },
+    "& fieldset": {
+      borderColor: "white"
+    },
+    "&:hover fieldset": {
+      borderColor: "#673147"
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#483248"
+    }
+  }
+}
+
+const availableColors = ['black','calico','tux','tabby'];
 
 export default function AddCatForm() {
+  const [name, setName] = useState<string | null>('');
+  const [hygiene_score, setHygieneScore] = useState<Number | null>(0);
+  const [happiness, setHappiness] = useState<Number | null>(0);
   const [colorSelected, setColorSelected] = useState<string | null>('black');
-  const [formValues, setFormValues] = useState(defaultValues)
+  const router = useRouter();
 
   const handleColor = (
     event: React.MouseEvent<HTMLElement>,
     newColor: string | null,
   ) => {
-    setColorSelected(newColor);
+    if (availableColors.find((colour)=> colour === newColor))
+      setColorSelected(newColor);
   };
+
+  const handleHygieneScore = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const score = event.currentTarget.valueAsNumber
+    setHygieneScore(score);
+  };
+
+  const handleHappiness = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const happinessScore = event.currentTarget.valueAsNumber
+    setHappiness(happinessScore);
+  };
+
+  const handleName = (
+    event: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    const name = event.currentTarget.value
+    setName(name);
+  };
+
+  const handleSubmit = (event: React.MouseEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const cat = {
+      name,
+      hygiene_score,
+      happiness,
+      colour: colorSelected
+    }
+
+    // router.push('/');
+  }
 
   return (
     <div className={styles.container}>
@@ -54,36 +115,16 @@ export default function AddCatForm() {
         }}
         noValidate
         autoComplete="off"
+        onSubmit={handleSubmit}
       >
         <TextField
           required
           id="name"
           label="Name"
           placeholder="Roberta"
-          value={formValues.name}
-          onChange={() => { }}
-          sx={{
-            ".autofit > :only-child": {
-              gridColumn: "1/-1"
-            },
-            "& label": {
-              color: "white"
-            },
-            "& label.Mui-focused": {
-              color: "#483248"
-            },
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "white"
-              },
-              "&:hover fieldset": {
-                borderColor: "#673147"
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "#483248"
-              }
-            }
-          }}
+          value={name}
+          onChange={handleName}
+          sx={textFieldStyle}
         />
         <Grid container spacing={2} sx={{ marginBottom: '20px' }}>
           <Grid item xs={4} >
@@ -93,26 +134,7 @@ export default function AddCatForm() {
               label="Age"
               type="number"
               placeholder="Hello World"
-              sx={{
-                width: '100%',
-                "& label": {
-                  color: "white"
-                },
-                "& label.Mui-focused": {
-                  color: "#483248"
-                },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "white"
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "#673147"
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#483248"
-                  }
-                }
-              }}
+              sx={textFieldStyle}
             />
           </Grid>
           <Grid item xs={4}>
@@ -120,28 +142,11 @@ export default function AddCatForm() {
               required
               id="hygiene_score"
               label="Hygiene Score"
+              value={hygiene_score}
               type="number"
               placeholder="100"
-              sx={{
-                width: '100%',
-                "& label": {
-                  color: "white"
-                },
-                "& label.Mui-focused": {
-                  color: "#483248"
-                },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "white"
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "#673147"
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#483248"
-                  }
-                }
-              }}
+              onChange={handleHygieneScore}
+              sx={textFieldStyle}
             />
           </Grid>
           <Grid item xs={4}>
@@ -149,31 +154,30 @@ export default function AddCatForm() {
               required
               id="happiness"
               label="Happiness Score"
+              value={happiness}
               placeholder="100"
               type='number'
-              sx={{
-                width: '100%',
-                "& label": {
-                  color: "white"
-                },
-                "& label.Mui-focused": {
-                  color: "#483248"
-                },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "white"
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "#673147"
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#483248"
-                  }
-                }
-              }}
+              sx={textFieldStyle}
+              onChange={handleHappiness}
             />
           </Grid>
         </Grid>
+        <Typography
+          variant="body1"
+          noWrap
+          sx={{
+            mr: 2,
+            mb: 2,
+            display: { xs: 'none', md: 'flex' },
+            fontFamily: 'monospace',
+            fontWeight: 200,
+            letterSpacing: '.1rem',
+            color: 'white',
+            textDecoration: 'none',
+          }}
+        >
+          Select a colour:
+        </Typography>
         <ToggleButtonGroup
           value={colorSelected}
           exclusive
@@ -249,6 +253,11 @@ export default function AddCatForm() {
             </Box>
           </ToggleButton>
         </ToggleButtonGroup>
+        <Grid container spacing={2} sx={{ marginTop: '20px' }}>
+          <Grid item container justifyContent={'center'} xs={12}>
+            <Button variant="contained" color="secondary" type="submit">Save</Button>
+          </Grid>
+        </Grid>
       </Box>
     </div>
   );

@@ -6,36 +6,65 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
 import Paper from '@mui/material/Paper';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import ClickableItem from './ClickableItem';
 
 
 export default function SpacingGrid(props: any) {
 
   return (
-    <Box sx={{
-      flexGrow: 1,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'top',
-      minHeight: '20vh',
-      padding: '10rem 2rem 2rem 0',
-      height: '89vh'
-    }}>
-      <Grid sx={{ flexGrow: 1 }} container spacing={2}>
-        <Grid item xs={3}>
-          <ClickableItem specifier={"add"} />
+    <>
+      <Box sx={{
+        flexGrow: 1,
+        justifyContent: 'center',
+        alignItems: 'top',
+        minHeight: '20vh',
+        padding: '10rem 2rem 2rem 0',
+        height: '89vh'
+      }}>
+        <Typography
+          variant="h2"
+          noWrap
+          sx={{
+            margin: 2,
+            padding: 0,
+            justifyContent: 'center',
+            display: { xs: 'none', md: 'flex' },
+            fontFamily: 'monospace',
+            fontWeight: 200,
+            letterSpacing: '.1rem',
+            color: 'white',
+            textDecoration: 'none',
+          }}
+        >
+          Welcome to the Kittyndex!
+        </Typography>
+        <Typography
+          variant="body1"
+          noWrap
+          sx={{
+            margin: 2,
+            padding: 0,
+            justifyContent: 'center',
+            display: { xs: 'none', md: 'flex' },
+            fontFamily: 'monospace',
+            fontWeight: 200,
+            letterSpacing: '.1rem',
+            color: 'white',
+            textDecoration: 'none',
+          }}
+        >
+          ...if Pokémon have one, why can't I?
+        </Typography>
+        <Grid sx={{ flexGrow: 1, flexWrap: 'wrap'}} container spacing={1}>
+          <Grid item container xs={12} md={6} >
+            <ClickableItem specifier={"add"} />
+          </Grid>
+          <Grid item container xs={12} md={6} >
+            <ClickableItem specifier={'list'} />
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <ClickableItem specifier={'edit'} />
-        </Grid>
-        <Grid item xs={3}>
-          <ClickableItem specifier={'list'} />
-        </Grid>
-        <Grid item xs={3}>
-          <ClickableItem specifier={'delete'} />
-        </Grid>
-      </Grid>
-    </Box>
+      </Box>
+    </>
   );
 }
