@@ -8,45 +8,45 @@ import Radio from '@mui/material/Radio';
 import Paper from '@mui/material/Paper';
 import { Box, Typography } from '@mui/material';
 import ClickableItem from './ClickableItem';
-
+import styles from '../styles/Home.module.css'
 
 export default function SpacingGrid(props: any) {
 
   return (
-    <>
+    <div className={styles.container}>
       <Box sx={{
-        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'top',
-        minHeight: '20vh',
-        padding: '10rem 2rem 2rem 0',
-        height: '89vh'
+        alignItems: 'center',
+        maxWidth: '910px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        paddingTop:'20px',
+        paddingBottom:'20px',
       }}>
         <Typography
           variant="h2"
-          noWrap
           sx={{
+            textAlign:'center',
             margin: 2,
             padding: 0,
-            justifyContent: 'center',
-            display: { xs: 'none', md: 'flex' },
             fontFamily: 'monospace',
             fontWeight: 200,
             letterSpacing: '.1rem',
             color: 'white',
             textDecoration: 'none',
+            fontSize:{xs:'2rem', md:'3.75rem'}
           }}
         >
           Welcome to the Kittyndex!
         </Typography>
         <Typography
           variant="body1"
-          noWrap
           sx={{
+            textAlign:'center',
             margin: 2,
             padding: 0,
-            justifyContent: 'center',
-            display: { xs: 'none', md: 'flex' },
             fontFamily: 'monospace',
             fontWeight: 200,
             letterSpacing: '.1rem',
@@ -56,15 +56,15 @@ export default function SpacingGrid(props: any) {
         >
           ...if Pokémon have one, why can't I?
         </Typography>
-        <Grid sx={{ flexGrow: 1, flexWrap: 'wrap'}} container spacing={1}>
-          <Grid item container xs={12} md={6} >
+        <Grid container spacing={1} sx={{marginLeft:'auto', marginRight:'auto'}}>
+          <Grid item xs={12} md={6}>
             <ClickableItem specifier={"add"} />
           </Grid>
-          <Grid item container xs={12} md={6} >
+          <Grid item xs={12} md={6}>
             <ClickableItem specifier={'list'} />
           </Grid>
         </Grid>
       </Box>
-    </>
+    </div>
   );
 }

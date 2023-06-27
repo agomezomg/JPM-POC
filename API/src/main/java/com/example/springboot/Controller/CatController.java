@@ -2,18 +2,22 @@ package com.example.springboot.Controller;
 
 import com.example.springboot.Repositories.CatRepository;
 import com.example.springboot.Models.Cat;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/api/")
 public class CatController {
 
     @Autowired
@@ -26,17 +30,23 @@ public class CatController {
 
     @GetMapping("/cats")
     @ResponseBody
-    public String getCats(Model model) {
+    public Object[] getCats(Model model) {
         Iterable<Cat> catList = catRepo.findAll();
         model.addAttribute("catList", catList);
-        String output = "";
+        ArrayList<Cat> cats = new ArrayList<>();
         for (Cat cat : catList) {
-            System.out.println(cat.toString());
-            output += cat.getID() + ". " + cat.toString() + "\n";
+            cats.add(cat);
         }
-        return output;
+        return cats.toArray();
     }
 
+    @GetMapping("/cats/{id}")
+    @ResponseBody
+    public Cat getCatById(@PathVariable long id) {
+        Cat inDB = catRepo.findById(id).get();
+        return inDB;
+    }
+ 
     @PostMapping("/cats")
     public String createCat(@RequestBody final Cat cat) {
         Cat result = catRepo.save(cat);
@@ -54,6 +64,14 @@ public class CatController {
             return result.getID() + ": " + result.getName();
         }
         return "{}";
+    }
+    
+    @DeleteMapping("/cats/{id}")
+    @ResponseBody
+    public Cat deleteCat(@PathVariable long id) {
+        Cat inDB = catRepo.findById(id).get();
+        catRepo.delete(inDB);
+        return inDB;
     }
 
 }

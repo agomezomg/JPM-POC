@@ -1,4 +1,3 @@
-import styles from '../../styles/Home.module.css'
 import * as React from 'react';
 import { useState } from 'react';
 import Box from '@mui/material/Box';
@@ -9,12 +8,12 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { ToggleButton } from '@mui/material';
 import Image from 'next/image';
 import Button from '@mui/material/Button';
-import { useRouter } from 'next/router';
 import {
   useMutation,
   useQueryClient,
 } from 'react-query'
-import { createCat } from '../api/cats';
+import { updateCat } from '../pages/api/cats';
+import Cat from '../cats';
 
 const textFieldStyle = {
   width: '100%',
@@ -45,83 +44,54 @@ const textFieldStyle = {
 
 const availableColors = ['black', 'calico', 'tux', 'tabby'];
 
-export default function AddCatForm() {
+export default function EditCatForm(cat: Cat) {
   // Access the client
   const queryClient = useQueryClient();
 
   // Mutations
-  const mutation = useMutation(createCat, {
+  const mutation = useMutation(updateCat, {
     onSuccess: () => {
       queryClient.invalidateQueries('cats');
     },
   });
 
-  const [name, setName] = useState<string | null>('');
-  const [hygiene_score, setHygieneScore] = useState<number | null>(0);
-  const [happiness, setHappiness] = useState<number | null>(0);
-  const [colorSelected, setColorSelected] = useState<string | null>('black');
-  const [age, setAge] = useState<number | null>(0);
-  const router = useRouter();
+  const [formValues, setFormValues] = useState<Cat>({
+    id: cat.id,
+    name: cat.name,
+    age: cat.age,
+    hygiene_score: cat.hygiene_score,
+    happiness: cat.happiness,
+    colour: cat.colour
+  });
+
+  React.useEffect(() => {
+    setFormValues({...cat });
+  },[cat])
 
   const handleColor = (
     event: React.MouseEvent<HTMLElement>,
     newColor: string | null,
   ) => {
     if (availableColors.find((colour) => colour === newColor))
-      setColorSelected(newColor);
+      setFormValues({ ...formValues, colour: newColor });
   };
 
-  const handleHygieneScore = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const score = event.currentTarget.valueAsNumber
-    setHygieneScore(score);
-  };
-
-  const handleHappiness = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const happinessScore = event.currentTarget.valueAsNumber
-    setHappiness(happinessScore);
-  };
-
-  const handleName = (
-    event: React.ChangeEvent<HTMLTextAreaElement>,
-  ) => {
-    const name = event.currentTarget.value;
-    setName(name);
-  };
-
-  const handleAge = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const age = event.currentTarget.valueAsNumber;
-    setAge(age);
-  };
-
-  const clearFormValues = () => {
-    setName('');
-    setHygieneScore(0);
-    setHappiness(0);
-    setAge(0);
-    setColorSelected('black');
+  const handleInputChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const { name, value } = e.currentTarget;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
   };
 
   const handleSubmit = (event: React.MouseEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    mutation.mutate({
-      name,
-      hygiene_score,
-      happiness,
-      colour: colorSelected,
-      age
-    });
-
-    clearFormValues();
-    // router.push('/');
-  };
+    mutation.mutate(formValues);
+  }
 
   return (
-    <div className={styles.container}>
+    <>
       <Box
         component="form"
         sx={{
@@ -141,22 +111,6 @@ export default function AddCatForm() {
         autoComplete="off"
         onSubmit={handleSubmit}
       >
-        <Typography
-          variant="h2"
-          noWrap
-          sx={{
-            mr: 2,
-            display: { md: 'flex' },
-            fontFamily: 'monospace',
-            fontWeight: 200,
-            letterSpacing: '.1rem',
-            color: 'white',
-            textDecoration: 'none',
-            fontSize: { xs: '2rem', md: '3.75rem' }
-          }}
-        >
-          Cat Create Form
-        </Typography>
         <Grid container spacing={2} sx={{ marginBottom: '20px', width: '100%' }}>
           <Grid item xs={12} >
             <TextField
@@ -164,8 +118,8 @@ export default function AddCatForm() {
               id="name"
               label="Name"
               placeholder="Roberta"
-              value={name}
-              onChange={handleName}
+              value={formValues.name}
+              onChange={() => { handleInputChange }}
               sx={textFieldStyle}
             />
           </Grid>
@@ -174,10 +128,10 @@ export default function AddCatForm() {
               required
               id="age"
               label="Age"
-              value={age}
+              value={formValues.age}
               type="number"
               placeholder="15"
-              onChange={handleAge}
+              onChange={() => { handleInputChange }}
               sx={textFieldStyle}
             />
           </Grid>
@@ -186,10 +140,10 @@ export default function AddCatForm() {
               required
               id="hygiene_score"
               label="Hygiene Score"
-              value={hygiene_score}
+              value={formValues.hygiene_score}
               type="number"
               placeholder="100"
-              onChange={handleHygieneScore}
+              onChange={() => { handleInputChange }}
               sx={textFieldStyle}
             />
           </Grid>
@@ -198,11 +152,11 @@ export default function AddCatForm() {
               required
               id="happiness"
               label="Happiness Score"
-              value={happiness}
+              value={formValues.happiness}
               placeholder="100"
               type='number'
               sx={textFieldStyle}
-              onChange={handleHappiness}
+              onChange={() => { handleInputChange }}
             />
           </Grid>
         </Grid>
@@ -224,7 +178,7 @@ export default function AddCatForm() {
           Select a colour:
         </Typography>
         <ToggleButtonGroup
-          value={colorSelected}
+          value={formValues.colour}
           exclusive
           onChange={handleColor}
           aria-label="cat colour"
@@ -235,8 +189,7 @@ export default function AddCatForm() {
             justifyContent: 'center'
           }}
         >
-          <ToggleButton value="black" aria-label="black colour"
-            sx={{ marginLeft: '1px !important', borderLeftColor: 'rgba(0, 0, 0, 0.12) !important' }}>
+          <ToggleButton value="black" aria-label="black colour" sx={{ marginLeft: '1px !important', borderLeftColor: 'rgba(0, 0, 0, 0.12) !important' }}>
             <Box
               sx={{
                 width: 200,
@@ -253,8 +206,7 @@ export default function AddCatForm() {
               </div>
             </Box>
           </ToggleButton>
-          <ToggleButton value="calico" aria-label="calico colour"
-            sx={{ marginLeft: '1px !important', borderLeftColor: 'rgba(0, 0, 0, 0.12) !important' }}>
+          <ToggleButton value="calico" aria-label="calico colour" sx={{ marginLeft: '1px !important', borderLeftColor: 'rgba(0, 0, 0, 0.12) !important' }}>
             <Box
               sx={{
                 width: 200,
@@ -271,8 +223,7 @@ export default function AddCatForm() {
               </div>
             </Box>
           </ToggleButton>
-          <ToggleButton value="tux" aria-label="tux colour"
-            sx={{ marginLeft: '1px !important', borderLeftColor: 'rgba(0, 0, 0, 0.12) !important' }}>
+          <ToggleButton value="tux" aria-label="tux colour" sx={{ marginLeft: '1px !important', borderLeftColor: 'rgba(0, 0, 0, 0.12) !important' }}>
             <Box
               sx={{
                 width: 200,
@@ -289,8 +240,7 @@ export default function AddCatForm() {
               </div>
             </Box>
           </ToggleButton>
-          <ToggleButton value="tabby" aria-label="tabby colour"
-            sx={{ marginLeft: '1px !important', borderLeftColor: 'rgba(0, 0, 0, 0.12) !important' }}>
+          <ToggleButton value="tabby" aria-label="tabby colour" sx={{ marginLeft: '1px !important', borderLeftColor: 'rgba(0, 0, 0, 0.12) !important' }}>
             <Box
               sx={{
                 width: 200,
@@ -314,6 +264,6 @@ export default function AddCatForm() {
           </Grid>
         </Grid>
       </Box>
-    </div>
+    </>
   );
 }
