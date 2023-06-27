@@ -46,7 +46,7 @@ public class CatController {
         Cat inDB = catRepo.findById(id).get();
         return inDB;
     }
- 
+
     @PostMapping("/cats")
     public String createCat(@RequestBody final Cat cat) {
         Cat result = catRepo.save(cat);
@@ -57,15 +57,12 @@ public class CatController {
     @ResponseBody
     public String updateCat(@PathVariable long id, @RequestBody final Cat cat) {
         Cat inDB = catRepo.findById(id).get();
-        boolean changed = inDB.setValues(cat);
-        
-        if (changed) {
-            Cat result = catRepo.save(inDB);
-            return result.getID() + ": " + result.getName();
-        }
-        return "{}";
+        inDB.setValues(cat);
+
+        Cat result = catRepo.save(inDB);
+        return result.getID() + ": " + result.getName();
     }
-    
+
     @DeleteMapping("/cats/{id}")
     @ResponseBody
     public Cat deleteCat(@PathVariable long id) {

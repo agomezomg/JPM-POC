@@ -75,29 +75,19 @@ public class Cat implements Serializable {
         this.hygiene_score = hygiene_score;
     }
 
-    public boolean setValues(Cat cat) {
-        boolean changed = false;
-        if (cat.name != null && !cat.name.isEmpty()) {
+    public void setValues(Cat cat) {
+        String[] colourValues = {"Black","Calico","Tux","Tabby"};
+        System.out.println(colourValues);
+        if (cat.name != null && !cat.name.isEmpty())
             this.name = cat.name;
-            changed = true;
-        }
-        if (cat.age > 0 && cat.age <= 40 && cat.age > this.age) {
+        if (cat.age > 0 && cat.age <= 40 && cat.age > this.age)
             this.age = cat.age; // can only age up, I guess sadfasdf
-            changed = true;
-        }
-        if (cat.colour != null && !cat.colour.equals(this.colour)) {
+        if (cat.colour != null && !cat.colour.equals(this.colour))
             this.colour = cat.colour;
-            changed = true;
-        }
-        if (cat.hygiene_score >= 0 && cat.hygiene_score <= 100) {
+        if (cat.hygiene_score >= 0 && cat.hygiene_score <= 100)
             this.hygiene_score = cat.hygiene_score;
-            changed = true;
-        }
-        if (cat.happiness >= 0 && cat.happiness <= 100) {
+        if (cat.happiness >= 0 && cat.happiness <= 100)
             this.happiness = cat.happiness;
-            changed = true;
-        }
-        return changed;
     }
 
     @Override
@@ -107,7 +97,7 @@ public class Cat implements Serializable {
         return obj;
     }
 
-    public String getID() {
-        return this.id + "";
+    public long getID() {
+        return this.id;
     }
 }
