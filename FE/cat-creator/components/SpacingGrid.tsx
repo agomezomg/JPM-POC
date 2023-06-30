@@ -27,6 +27,7 @@ export default function SpacingGrid(props: any) {
       }}>
         <Typography
           variant="h2"
+          data-testid="logo"
           sx={{
             textAlign:'center',
             margin: 2,
